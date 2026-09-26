@@ -2,48 +2,231 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Customization — Chess Analyzer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Chess Customisation</title>
+
 <style>
-:root{--bg:#12141a;--panel:#1c1f28;--line:#2c303c;--text:#eef0f4;--muted:#9aa2b1;--accent:#5b9dff;}
-:root[data-theme="light"]{--bg:#f6f3ee;--panel:#fff;--line:#e3ddd2;--text:#211d17;--muted:#7a7266;}
-*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}.wrap{width:min(900px,100%);margin:auto;padding:78px 18px 50px}.back{position:fixed;top:14px;left:14px;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--panel);color:var(--text);display:grid;place-items:center;text-decoration:none;box-shadow:0 8px 24px -10px #0008;font-size:1.1rem;z-index:5}.top{display:flex;justify-content:space-between;gap:18px;align-items:end;margin-bottom:24px}.eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:.68rem;font-weight:800;color:var(--accent)}h1{font-size:clamp(1.8rem,5vw,2.7rem);letter-spacing:-.04em;margin:5px 0}.lead{color:var(--muted);max-width:62ch;line-height:1.6;margin:0}.saveState{font-size:.75rem;color:var(--muted);white-space:nowrap}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.card{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:0 15px 35px -28px #000c}.card.wide{grid-column:1/-1}.card h2{font-size:.95rem;margin:0 0 5px}.hint{font-size:.76rem;color:var(--muted);line-height:1.5;margin:0 0 14px}.options{display:flex;flex-wrap:wrap;gap:8px}.option{border:1px solid var(--line);background:var(--bg);color:var(--text);padding:9px 11px;border-radius:10px;font-weight:650;font-size:.8rem;cursor:pointer}.option.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent);background:color-mix(in srgb,var(--accent) 8%,var(--bg))}.swatches{display:flex;gap:10px;flex-wrap:wrap}.swatch{width:76px;height:52px;border-radius:10px;border:2px solid transparent;cursor:pointer;overflow:hidden;display:grid;grid-template-columns:1fr 1fr}.swatch span{display:block}.swatch.active{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 18%,transparent)}.swatch:after{content:attr(title);position:absolute;opacity:0}.swatch{position:relative}.toggleRow{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:11px 0;border-top:1px solid var(--line)}.toggleRow:first-of-type{border-top:0;padding-top:0}.switch{width:44px;height:25px;border-radius:999px;background:#555;border:0;position:relative;cursor:pointer}.switch:after{content:"";position:absolute;width:19px;height:19px;top:3px;left:3px;border-radius:50%;background:white;transition:.16s}.switch.on{background:var(--accent)}.switch.on:after{transform:translateX(19px)}.danger{color:#ff8b8b}.footer{margin-top:20px;color:var(--muted);font-size:.72rem;line-height:1.6}.reset{margin-top:14px;background:var(--panel);border:1px solid var(--line);color:var(--text);padding:10px 13px;border-radius:10px;font-weight:700;cursor:pointer}@media(max-width:650px){.grid{grid-template-columns:1fr}.card.wide{grid-column:auto}.top{align-items:start;flex-direction:column}.saveState{white-space:normal}}
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    font-family:Arial,sans-serif;
+    background:#111827;
+    color:white;
+}
+
+body{
+    overflow-x:hidden;
+}
+
+.container{
+    width:100%;
+    max-width:700px;
+    margin:auto;
+    padding:25px 15px 40px;
+}
+
+h1{
+    text-align:center;
+    margin-top:5px;
+}
+
+.card{
+    background:#1f2937;
+    padding:18px;
+    margin-top:18px;
+    border-radius:12px;
+}
+
+label{
+    display:block;
+    margin:14px 0 7px;
+    color:#cbd5e1;
+}
+
+select,input{
+    width:100%;
+    padding:11px;
+    border-radius:7px;
+    border:1px solid #4b5563;
+    background:#374151;
+    color:white;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    margin-top:18px;
+    padding:12px;
+    border:0;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.preview{
+    margin-top:20px;
+    display:flex;
+    justify-content:center;
+}
+
+#previewBoard{
+    width:min(80vw,320px);
+    height:min(80vw,320px);
+    display:grid;
+    grid-template-columns:repeat(8,1fr);
+    grid-template-rows:repeat(8,1fr);
+    overflow:hidden;
+    border-radius:5px;
+}
+
+.previewSquare{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:clamp(18px,6vw,38px);
+}
 </style>
 </head>
+
 <body>
-<a class="back" href="index.html" aria-label="Back to analyzer">←</a>
-<main class="wrap">
-  <div class="top"><div><div class="eyebrow">Chess Analyzer</div><h1>Customize your workspace</h1><p class="lead">Tune the board, colors and interface density. Your choices are stored locally on this device.</p></div><div class="saveState" id="saveState">Saved locally</div></div>
-  <section class="grid">
-    <div class="card"><h2>Appearance</h2><p class="hint">Choose how the analyzer looks.</p><div class="options" id="themeOptions"><button class="option" data-theme="dark">Dark</button><button class="option" data-theme="light">Light</button><button class="option" data-theme="system">System</button></div></div>
-    <div class="card"><h2>Accent</h2><p class="hint">Pick the highlight color for controls and analysis.</p><div class="options" id="accentOptions"><button class="option" data-accent="#5b9dff">Blue</button><button class="option" data-accent="#7c6cff">Violet</button><button class="option" data-accent="#22b573">Green</button><button class="option" data-accent="#e6a23c">Gold</button></div></div>
-    <div class="card wide"><h2>Board theme</h2><p class="hint">Pick the look of your board. Your choice follows you back to the analyzer.</p><div class="swatches" id="boardOptions">
-      <button class="swatch" title="Classic" data-light="#f0d9b5" data-dark="#b58863"><span style="background:#f0d9b5"></span><span style="background:#b58863"></span></button>
-      <button class="swatch" title="Green" data-light="#eeeed2" data-dark="#769656"><span style="background:#eeeed2"></span><span style="background:#769656"></span></button>
-      <button class="swatch" title="Blue" data-light="#d8dee9" data-dark="#4c566a"><span style="background:#d8dee9"></span><span style="background:#4c566a"></span></button>
-      <button class="swatch" title="Wood" data-light="#f3e5c8" data-dark="#7c5b43"><span style="background:#f3e5c8"></span><span style="background:#7c5b43"></span></button>
-      <button class="swatch" title="Purple" data-light="#e8def8" data-dark="#76589a"><span style="background:#e8def8"></span><span style="background:#76589a"></span></button>
-      <button class="swatch" title="Slate" data-light="#e7e9ed" data-dark="#596273"><span style="background:#e7e9ed"></span><span style="background:#596273"></span></button>
-    </div></div>
-    <div class="card wide"><h2>Piece style</h2><p class="hint">Choose how the chess pieces are drawn. These are local font-based styles, so no extra image downloads are required.</p><div class="options" id="pieceOptions">
-      <button class="option" data-piece="classic">Classic <span style="font-size:1.35rem">♔♞</span></button>
-      <button class="option" data-piece="serif">Serif <span style="font-family:Georgia;font-size:1.35rem">♔♞</span></button>
-      <button class="option" data-piece="sans">Modern <span style="font-family:'Segoe UI Symbol';font-size:1.35rem">♔♞</span></button>
-      <button class="option" data-piece="mono">Mono <span style="font-family:monospace;font-size:1.35rem">♔♞</span></button>
-    </div></div>
-    <div class="card"><h2>Interface density</h2><p class="hint">Control how much information fits on screen.</p><div class="options" id="densityOptions"><button class="option" data-density="comfortable">Comfortable</button><button class="option" data-density="compact">Compact</button></div></div>
-    <div class="card"><h2>Board details</h2><p class="hint">Small preferences for the board.</p><div class="toggleRow"><span>Show coordinates</span><button class="switch" id="coordsSwitch" aria-label="Toggle coordinates"></button></div><div class="toggleRow"><span>Highlight legal moves</span><button class="switch on" id="movesSwitch" aria-label="Toggle legal move highlights"></button></div></div>
-    <div class="card wide"><h2>Privacy & advertising</h2><p class="hint">Customization does not hide content from search engines or advertising systems. When ads are enabled, the site should remain transparent and all pages containing ads should follow the applicable publisher policies. This page is simply for user preferences.</p><button class="reset" id="resetBtn">Reset customization</button></div>
-  </section>
-  <div class="footer">Chess Analyzer · Preferences stay on this device unless you clear your browser storage. <a href="index.html" style="color:var(--accent)">Return to analyzer</a></div>
-</main>
+
+<div class="container">
+
+<h1>♟ Board Customisation</h1>
+
+<div class="card">
+
+<label for="theme">Board Theme</label>
+
+<select id="theme">
+    <option value="classic">Classic</option>
+    <option value="green">Green</option>
+    <option value="blue">Blue</option>
+    <option value="purple">Purple</option>
+    <option value="dark">Dark</option>
+</select>
+
+<label for="pieces">Piece Style</label>
+
+<select id="pieces">
+    <option value="unicode">Classic Unicode</option>
+    <option value="simple">Simple</option>
+</select>
+
+<button onclick="saveSettings()">Save Customisation</button>
+
+<button onclick="window.location.href='index.html'">
+    Back to Chess Board
+</button>
+
+</div>
+
+<div class="card preview">
+    <div id="previewBoard"></div>
+</div>
+
+</div>
+
 <script>
-const KEY='chessAnalyzerPrefs';
-let prefs=JSON.parse(localStorage.getItem(KEY)||'{}');
-function save(){localStorage.setItem(KEY,JSON.stringify(prefs));document.getElementById('saveState').textContent='Saved just now';setTimeout(()=>document.getElementById('saveState').textContent='Saved locally',900)}
-function apply(){const r=document.documentElement; if(prefs.theme==='dark'||prefs.theme==='light')r.setAttribute('data-theme',prefs.theme);else r.removeAttribute('data-theme'); if(prefs.accent)r.style.setProperty('--accent',prefs.accent);if(prefs.lightSquare)r.style.setProperty('--light',prefs.lightSquare);if(prefs.darkSquare)r.style.setProperty('--dark',prefs.darkSquare); if(prefs.pieceStyle)r.setAttribute('data-pieces',prefs.pieceStyle);}
-function mark(){document.querySelectorAll('[data-theme]').forEach(b=>b.classList.toggle('active',b.dataset.theme===(prefs.theme||'system')));document.querySelectorAll('[data-accent]').forEach(b=>b.classList.toggle('active',b.dataset.accent===prefs.accent));document.querySelectorAll('[data-density]').forEach(b=>b.classList.toggle('active',b.dataset.density===(prefs.density||'comfortable')));document.querySelectorAll('[data-piece]').forEach(b=>b.classList.toggle('active',b.dataset.piece===(prefs.pieceStyle||'classic')));document.querySelectorAll('.swatch').forEach(b=>b.classList.toggle('active',b.dataset.light===prefs.lightSquare&&b.dataset.dark===prefs.darkSquare));document.getElementById('coordsSwitch').classList.toggle('on',!prefs.hideCoordinates);}
-document.querySelectorAll('#themeOptions .option').forEach(b=>b.onclick=()=>{prefs.theme=b.dataset.theme;save();apply();mark()});document.querySelectorAll('#accentOptions .option').forEach(b=>b.onclick=()=>{prefs.accent=b.dataset.accent;save();apply();mark()});document.querySelectorAll('#pieceOptions .option').forEach(b=>b.onclick=()=>{prefs.pieceStyle=b.dataset.piece;save();apply();mark()});document.querySelectorAll('#densityOptions .option').forEach(b=>b.onclick=()=>{prefs.density=b.dataset.density;save();mark()});document.querySelectorAll('.swatch').forEach(b=>b.onclick=()=>{prefs.lightSquare=b.dataset.light;prefs.darkSquare=b.dataset.dark;save();apply();mark()});document.getElementById('coordsSwitch').onclick=()=>{prefs.hideCoordinates=!prefs.hideCoordinates;save();mark()};document.getElementById('movesSwitch').onclick=()=>{prefs.highlightMoves=prefs.highlightMoves===false;save();document.getElementById('movesSwitch').classList.toggle('on',prefs.highlightMoves!==false)};document.getElementById('resetBtn').onclick=()=>{prefs={};localStorage.removeItem(KEY);location.reload()};apply();mark();document.getElementById('movesSwitch').classList.toggle('on',prefs.highlightMoves!==false);
+
+const themes={
+    classic:["#f0d9b5","#b58863"],
+    green:["#eeeed2","#769656"],
+    blue:["#dbeafe","#3b82f6"],
+    purple:["#ede9fe","#7c3aed"],
+    dark:["#6b7280","#374151"]
+};
+
+const normalPieces=[
+    "♜","♞","♝","♛","♚","♝","♞","♜",
+    "♟","♟","♟","♟","♟","♟","♟","♟",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "♙","♙","♙","♙","♙","♙","♙","♙",
+    "♖","♘","♗","♕","♔","♗","♘","♖"
+];
+
+const simplePieces=[
+    "R","N","B","Q","K","B","N","R",
+    "P","P","P","P","P","P","P","P",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "P","P","P","P","P","P","P","P",
+    "R","N","B","Q","K","B","N","R"
+];
+
+const themeSelect=document.getElementById("theme");
+const pieceSelect=document.getElementById("pieces");
+const preview=document.getElementById("previewBoard");
+
+function updatePreview(){
+
+    const colors=themes[themeSelect.value];
+
+    preview.innerHTML="";
+
+    const pieces=
+        pieceSelect.value==="simple"
+        ? simplePieces
+        : normalPieces;
+
+    for(let i=0;i<64;i++){
+
+        const square=document.createElement("div");
+
+        square.className="previewSquare";
+
+        const row=Math.floor(i/8);
+        const col=i%8;
+
+        square.style.background=
+            (row+col)%2===0
+            ? colors[0]
+            : colors[1];
+
+        square.textContent=pieces[i];
+
+        preview.appendChild(square);
+    }
+}
+
+function saveSettings(){
+
+    localStorage.setItem(
+        "chessTheme",
+        themeSelect.value
+    );
+
+    localStorage.setItem(
+        "chessPieces",
+        pieceSelect.value
+    );
+
+    alert("Customisation saved!");
+
+    window.location.href="index.html";
+}
+
+themeSelect.addEventListener("change",updatePreview);
+pieceSelect.addEventListener("change",updatePreview);
+
+updatePreview();
+
 </script>
+
 </body>
 </html>
