@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Chess Customisation</title>
+
+<style>
+*{box-sizing:border-box}
+
+html,body{
+    margin:0;
+    padding:0;
+    min-height:100%;
+    font-family:Arial,sans-serif;
+    background:#111827;
+    color:white;
+}
+
+body{
+    overflow-x:hidden;
+}
+
+.container{
+    width:100%;
+    max-width:700px;
+    margin:auto;
+    padding:25px 15px 40px;
+}
+
+h1{
+    text-align:center;
+    margin-top:5px;
+}
+
+.card{
+    background:#1f2937;
+    padding:18px;
+    margin-top:18px;
+    border-radius:12px;
+}
+
+label{
+    display:block;
+    margin:14px 0 7px;
+    color:#cbd5e1;
+}
+
+select,input{
+    width:100%;
+    padding:11px;
+    border-radius:7px;
+    border:1px solid #4b5563;
+    background:#374151;
+    color:white;
+    font-size:15px;
+}
+
+button{
+    width:100%;
+    margin-top:18px;
+    padding:12px;
+    border:0;
+    border-radius:8px;
+    background:#2563eb;
+    color:white;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:#1d4ed8;
+}
+
+.preview{
+    margin-top:20px;
+    display:flex;
+    justify-content:center;
+}
+
+#previewBoard{
+    width:min(80vw,320px);
+    height:min(80vw,320px);
+    display:grid;
+    grid-template-columns:repeat(8,1fr);
+    grid-template-rows:repeat(8,1fr);
+    overflow:hidden;
+    border-radius:5px;
+}
+
+.previewSquare{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:clamp(18px,6vw,38px);
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>♟ Board Customisation</h1>
+
+<div class="card">
+
+<label for="theme">Board Theme</label>
+
+<select id="theme">
+    <option value="classic">Classic</option>
+    <option value="green">Green</option>
+    <option value="blue">Blue</option>
+    <option value="purple">Purple</option>
+    <option value="dark">Dark</option>
+</select>
+
+<label for="pieces">Piece Style</label>
+
+<select id="pieces">
+    <option value="unicode">Classic Unicode</option>
+    <option value="simple">Simple</option>
+</select>
+
+<button onclick="saveSettings()">Save Customisation</button>
+
+<button onclick="window.location.href='index.html'">
+    Back to Chess Board
+</button>
+
+</div>
+
+<div class="card preview">
+    <div id="previewBoard"></div>
+</div>
+
+</div>
+
+<script>
+
+const themes={
+    classic:["#f0d9b5","#b58863"],
+    green:["#eeeed2","#769656"],
+    blue:["#dbeafe","#3b82f6"],
+    purple:["#ede9fe","#7c3aed"],
+    dark:["#6b7280","#374151"]
+};
+
+const normalPieces=[
+    "♜","♞","♝","♛","♚","♝","♞","♜",
+    "♟","♟","♟","♟","♟","♟","♟","♟",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "♙","♙","♙","♙","♙","♙","♙","♙",
+    "♖","♘","♗","♕","♔","♗","♘","♖"
+];
+
+const simplePieces=[
+    "R","N","B","Q","K","B","N","R",
+    "P","P","P","P","P","P","P","P",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "","","","","","","","",
+    "P","P","P","P","P","P","P","P",
+    "R","N","B","Q","K","B","N","R"
+];
+
+const themeSelect=document.getElementById("theme");
+const pieceSelect=document.getElementById("pieces");
+const preview=document.getElementById("previewBoard");
+
+function updatePreview(){
+
+    const colors=themes[themeSelect.value];
+
+    preview.innerHTML="";
+
+    const pieces=
+        pieceSelect.value==="simple"
+        ? simplePieces
+        : normalPieces;
+
+    for(let i=0;i<64;i++){
+
+        const square=document.createElement("div");
+
+        square.className="previewSquare";
+
+        const row=Math.floor(i/8);
+        const col=i%8;
+
+        square.style.background=
+            (row+col)%2===0
+            ? colors[0]
+            : colors[1];
+
+        square.textContent=pieces[i];
+
+        preview.appendChild(square);
+    }
+}
+
+function saveSettings(){
+
+    localStorage.setItem(
+        "chessTheme",
+        themeSelect.value
+    );
+
+    localStorage.setItem(
+        "chessPieces",
+        pieceSelect.value
+    );
+
+    alert("Customisation saved!");
+
+    window.location.href="index.html";
+}
+
+themeSelect.addEventListener("change",updatePreview);
+pieceSelect.addEventListener("change",updatePreview);
+
+updatePreview();
+
+</script>
+
+</body>
+  </html>
